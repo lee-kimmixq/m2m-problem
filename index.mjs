@@ -98,21 +98,17 @@ db.GameUser.belongsTo(db.Game);
 // =====================================================================================
 
 const create = async (userId) => {
-  const cardDeck = ['a', 'b', 'c'];
-
-  const newGame = {
-    gameState: {
-      cardDeck,
-      player1Hand: [],
-      player2Hand: [],
-    },
-  };
-
   try {
     const user = await db.User.findByPk(userId); // find current user
     if (!user) throw new Error('cannot find user');
 
-    const game = await db.Game.create(newGame); // create row in games table
+    const game = await db.Game.create({
+      gameState: {
+        cardDeck: ['a', 'b', 'c'],
+        player1Hand: [],
+        player2Hand: [],
+      },
+    }); // create row in games table
     if (!game) throw new Error('cannot create new game');
 
     const opponent = await db.User.findOne({ // find a random user that is NOT current user
